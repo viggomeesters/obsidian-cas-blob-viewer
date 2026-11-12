@@ -57,7 +57,7 @@ The Community submission is being prepared. Manual installation uses `main.js`, 
 
 The plugin reads existing blobs; it does not create a CAS store or import attachments. All paths must remain relative to the current vault. Optional metadata must use `record_type: "file"`, `sha256`, and optionally `filename`/`mime_type`. Invalid metadata rows are ignored. HTML, XHTML and text render as inert source, never as an executable web page. PDF content opens in the browser's PDF viewer. Images render inline. Unsupported content and oversized blobs display a card. The size limit controls preview reads; the hash syntax identifies the expected blob but does not verify its digest.
 
-Rendering toggles require reloading the plugin. Live Preview remains experimental and off by default. Version 0.1.5 is validated on current desktop Obsidian on macOS; mobile and exact minimum-version execution are not claimed by those tests.
+Rendering toggles require reloading the plugin. Live Preview remains experimental and off by default. Version 0.1.6 is validated on current desktop Obsidian on macOS; mobile and exact minimum-version execution are not claimed by those tests.
 
 ## Development
 

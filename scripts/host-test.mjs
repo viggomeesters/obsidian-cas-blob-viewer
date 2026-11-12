@@ -16,6 +16,9 @@ async function acceptance(config) {
   const check=(name,ok)=>{checks[name]=!!ok;if(!ok)throw Error(name);};
   const plugin=app.plugins.plugins['cas-blob-viewer'];
   const settings={...plugin.settings}; const active=app.workspace.activeLeaf;
+  const contents=require('electron').remote.getCurrentWebContents();
+  const backgroundThrottling=contents.getBackgroundThrottling();
+  contents.setBackgroundThrottling(false);
   let leaf;
   try {
     check('correct-vault',app.vault.adapter.getBasePath()===config.vault);
@@ -78,10 +81,11 @@ async function acceptance(config) {
     check('attachment-rules-still-loaded',!!app.plugins.plugins['attachment-link-rules']);
   } catch(error){report.error=String(error);}
   finally {
-    plugin.settings=settings;plugin.metadataCache=null;
-    if(leaf)leaf.detach();
-    if(active)app.workspace.setActiveLeaf(active,{focus:false});
-    checks['active-note-restored']=app.workspace.activeLeaf===active;
+    const restore=(name,action)=>{try{action();checks[name]=true;}catch(error){checks[name]=false;report.error??=String(error);}};
+    restore('settings-object-restored',()=>{plugin.settings=settings;plugin.metadataCache=null;});
+    restore('test-tab-closed',()=>{if(leaf)leaf.detach();});
+    restore('active-note-restored',()=>{if(active)app.workspace.setActiveLeaf(active,{focus:false});if(app.workspace.activeLeaf!==active)throw Error('Active note differs');});
+    restore('background-timer-policy-restored',()=>{contents.setBackgroundThrottling(backgroundThrottling);});
   }
   report.passed=!report.error && Object.values(checks).every(Boolean);
   require('node:fs').writeFileSync(config.reportPath,JSON.stringify(report));

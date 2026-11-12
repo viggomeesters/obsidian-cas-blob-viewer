@@ -1,10 +1,10 @@
-# Release validation — 0.1.5
+# Release validation — 0.1.6
 
 The clean Community candidate contains the plugin, build/lint configuration, synthetic tests and public documentation. Runtime dependencies on Obsidian/CodeMirror are external and supplied by the host. No private vault helper or history is part of this repository.
 
 Local checks: clean `npm ci`, TypeScript, official `eslint-plugin-obsidianmd` with no warnings, unit parsing/path tests, built-plugin security/lifecycle regressions, production build and Community preflight. The synthetic runtime harness executes the actual bundled entrypoint, rather than mirroring its implementation.
 
-[Actual-host report](evidence/runtime-0.1.5-macos.json): 18 checks pass in Obsidian 1.15.0 (installer 1.12.7), macOS Apple Silicon. Covers inert HTML, absence of active markup/script execution, preserved source bytes, PNG rendering, empty/missing/oversized content, traversal rejection, wiki toggle, six searchable settings and six legacy controls, real preview note, cooperating plugin state and exact settings/active-note restoration. A real rendered synthetic HTML preview is shown below. No real vault content is used.
+[Actual-host report](evidence/runtime-0.1.6-macos.json): 21 checks pass in Obsidian 1.15.0 (installer 1.12.7), macOS Apple Silicon. Covers inert HTML, absence of active markup/script execution, preserved source bytes, PNG rendering, empty/missing/oversized content, traversal rejection, wiki toggle, six searchable settings and six legacy controls, real preview note, cooperating plugin state and exact settings/active-note restoration. A real rendered synthetic HTML preview is shown below. No real vault content is used.
 
 ![Inert HTML source in actual Obsidian](runtime-preview.png)
 

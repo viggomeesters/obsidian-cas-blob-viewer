@@ -1,0 +1,10 @@
+{
+  "id": "cas-blob-viewer",
+  "name": "CAS Blob Viewer",
+  "version": "0.1.5",
+  "minAppVersion": "1.5.0",
+  "description": "Render content-addressed vault blobs inline from durable sha256 references.",
+  "author": "Viggo Meesters",
+  "authorUrl": "https://github.com/viggomeesters",
+  "isDesktopOnly": false
+}

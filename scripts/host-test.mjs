@@ -1,0 +1,105 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {execFileSync} from 'node:child_process';
+import {setTimeout} from 'node:timers/promises';
+const [vaultArg, reportArg] = process.argv.slice(2);
+if (!vaultArg || !reportArg) throw Error('Usage: node scripts/host-test.mjs /path/to/obsidian-test-vault /new/report.json');
+const vault = fs.realpathSync(vaultArg);
+if (path.basename(vault)!=='obsidian-test-vault' || !fs.existsSync(path.join(vault,'.mail-drop-test-vault'))) throw Error('Use the marked standard test vault.');
+if (fs.existsSync(reportArg)) throw Error('Report already exists.');
+const cli=process.env.OBSIDIAN_CLI ?? 'obsidian';
+const call=(...args)=>execFileSync(cli,['vault=obsidian-test-vault',...args],{encoding:'utf8',timeout:60000});
+const dataPath=path.join(vault,'.obsidian/plugins/cas-blob-viewer/data.json');
+const data=fs.existsSync(dataPath)?fs.readFileSync(dataPath):null;
+async function acceptance(config) {
+  const checks={}; const report={realObsidian:true,checks};
+  const check=(name,ok)=>{checks[name]=!!ok;if(!ok)throw Error(name);};
+  const plugin=app.plugins.plugins['cas-blob-viewer'];
+  const settings={...plugin.settings}; const active=app.workspace.activeLeaf;
+  let leaf;
+  try {
+    check('correct-vault',app.vault.adapter.getBasePath()===config.vault);
+    report.pluginVersion=plugin.manifest.version;
+    const root=`fixtures/cas-blob-viewer/acceptance-${Date.now()}`;
+    report.fixtureRoot=root;
+    for(const dir of ['fixtures/cas-blob-viewer',root,root+'/blobs']) if(!await app.vault.adapter.exists(dir)) await app.vault.createFolder(dir);
+    const crypto=require('node:crypto');
+    const html='<script>window.__casExecuted=true</script><img src="https://example.invalid/leak">';
+    const bytes=new TextEncoder().encode(html);
+    const hash=crypto.createHash('sha256').update(bytes).digest('hex');
+    await app.vault.createFolder(root+'/blobs/'+hash.slice(0,2));
+    await app.vault.createBinary(root+'/blobs/'+hash.slice(0,2)+'/'+hash,bytes.buffer);
+    await app.vault.create(root+'/metadata.jsonl',JSON.stringify({record_type:'file',sha256:hash,mime_type:'text/html',filename:'synthetic.html'}));
+    plugin.settings={...settings,blobRoot:root+'/blobs',recordsFile:root+'/metadata.jsonl'};
+    plugin.metadataCache=null;
+    await plugin.saveSettings();
+    const node=createDiv();
+    await plugin.renderReference(node,{hash});
+    check('html-is-literal-source',node.querySelector('pre')?.textContent===html);
+    check('no-active-markup',!node.querySelector('script,img,iframe,button'));
+    check('script-not-executed',window.__casExecuted===undefined);
+    check('source-bytes-preserved',crypto.createHash('sha256').update(new Uint8Array(await app.vault.adapter.readBinary(root+'/blobs/'+hash.slice(0,2)+'/'+hash))).digest('hex')===hash);
+    const png=Uint8Array.from(atob('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jE9sAAAAASUVORK5CYII='),c=>c.charCodeAt(0));
+    const imageHash=crypto.createHash('sha256').update(png).digest('hex');
+    if(!await app.vault.adapter.exists(root+'/blobs/'+imageHash.slice(0,2)))await app.vault.createFolder(root+'/blobs/'+imageHash.slice(0,2));
+    await app.vault.createBinary(root+'/blobs/'+imageHash.slice(0,2)+'/'+imageHash,png.buffer);
+    const image=createDiv();await plugin.renderReference(image,{hash:imageHash});
+    check('image-rendered',image.querySelector('img')?.getAttribute('src')?.startsWith('blob:'));
+    const emptyHash=crypto.createHash('sha256').update(new Uint8Array()).digest('hex');
+    if(!await app.vault.adapter.exists(root+'/blobs/'+emptyHash.slice(0,2)))await app.vault.createFolder(root+'/blobs/'+emptyHash.slice(0,2));
+    await app.vault.createBinary(root+'/blobs/'+emptyHash.slice(0,2)+'/'+emptyHash,new ArrayBuffer(0));
+    const empty=createDiv();await plugin.renderReference(empty,{hash:emptyHash});
+    check('empty-source-card',empty.textContent.includes('not implemented'));
+    plugin.settings.maxRenderBytes=1;
+    const large=createDiv();await plugin.renderReference(large,{hash});
+    check('oversize-card',large.textContent.includes('too large'));
+    plugin.settings.maxRenderBytes=settings.maxRenderBytes;
+    const missing=createDiv();await plugin.renderReference(missing,{hash:'f'.repeat(64)});
+    check('missing-blob-error',missing.textContent.includes('not found'));
+    plugin.settings.blobRoot='../outside';
+    const outside=createDiv();await plugin.renderReference(outside,{hash});
+    check('path-traversal-blocked',outside.textContent.includes('vault-relative'));
+    plugin.settings.blobRoot=root+'/blobs';
+    plugin.settings.renderWikiEmbeds=false;
+    const unresolved=createDiv();unresolved.createSpan({text:`cas-sha256-${hash} not created yet`});
+    await plugin.replaceNativeUnresolvedCasEmbeds(unresolved);
+    check('disabled-wiki-preserved',!unresolved.querySelector('.cas-blob-viewer'));
+    const tab=app.setting.pluginTabs.find(t=>t.id==='cas-blob-viewer');
+    const definitions=tab.getSettingDefinitions();
+    check('all-six-settings-searchable',definitions.length===6 && definitions.every(d=>typeof d.render==='function'));
+    tab.display();
+    check('legacy-controls-present',tab.containerEl.querySelectorAll('input').length===6);
+    report.uiCopy=tab.containerEl.innerText;
+    const note=await app.vault.create(root+'/preview.md',`# CAS security acceptance\n\n\`\`\`cas-blob\nsha256: ${hash}\n\`\`\`\n`);
+    leaf=app.workspace.getLeaf('tab');
+    await leaf.openFile(note,{active:false,state:{mode:'preview'}});
+    check('real-note-opened',leaf.view.file.path===note.path);
+    check('mail-drop-still-loaded',!!app.plugins.plugins['outlook-drop-importer']);
+    check('attachment-rules-still-loaded',!!app.plugins.plugins['attachment-link-rules']);
+  } catch(error){report.error=String(error);}
+  finally {
+    plugin.settings=settings;plugin.metadataCache=null;
+    if(leaf)leaf.detach();
+    if(active)app.workspace.setActiveLeaf(active,{focus:false});
+    checks['active-note-restored']=app.workspace.activeLeaf===active;
+  }
+  report.passed=!report.error && Object.values(checks).every(Boolean);
+  require('node:fs').writeFileSync(config.reportPath,JSON.stringify(report));
+  return report;
+}
+let report;
+try {
+  call('eval',`code=(${acceptance.toString()})(${JSON.stringify({vault,reportPath:path.resolve(reportArg)})})`);
+  for(let n=0;n<300 && !fs.existsSync(reportArg);n++) await setTimeout(100);
+  if(!fs.existsSync(reportArg))throw Error('Host report timeout; inspect the Obsidian console.');
+  report=JSON.parse(fs.readFileSync(reportArg,'utf8'));
+} finally {
+  if(data) fs.writeFileSync(dataPath,data); else if(fs.existsSync(dataPath))fs.unlinkSync(dataPath);
+  call('plugin:reload','id=cas-blob-viewer');
+}
+report.appVersion=execFileSync(cli,['version'],{encoding:'utf8'}).trim();
+report.checks['settings-bytes-restored']=data?fs.readFileSync(dataPath).equals(data):!fs.existsSync(dataPath);
+report.passed=report.passed && report.checks['settings-bytes-restored'];
+fs.writeFileSync(reportArg,JSON.stringify(report,null,2)+'\n');
+console.log(JSON.stringify(report,null,2));
+if(!report.passed)process.exitCode=1;

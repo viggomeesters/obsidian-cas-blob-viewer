@@ -1,0 +1,26 @@
+{
+  "version": "0.1.6",
+  "sourceCommit": "f34cc596b7aeea16243f54027d85892d61417759",
+  "officialPreview": "Completed; no source findings; Dependencies Pass",
+  "officialReleaseReview": "Completed",
+  "network": "Pass",
+  "behavior": "Pass; vault reads",
+  "dependencies": "Pass",
+  "obfuscation": "Pass",
+  "buildVerification": "Pass; main.js reproduced byte-for-byte",
+  "artifactAttestation": "Optional recommendation assessed; no GitHub Actions used",
+  "communityListing": "https://community.obsidian.md/plugins/cas-blob-viewer",
+  "listingVersion": "0.1.6",
+  "anonymousAssetDownloads": "all three standard assets match the tested release files",
+  "assetsSHA256": {
+    "main.js": "b206b9f06ec728396978c5910143e603cd9f60277719a7ea7550dbf963a34dff",
+    "manifest.json": "f3e8ecf8c3c918ad694665f2d520763cc9d91f6f9d2c800215eac5d3a94e347e",
+    "styles.css": "ab1c0c9f081125d3e5dd4489126cdcf8c93e68f37581d21e6eeb5d63db535b15"
+  },
+  "catalogInstall": "pending new-ID propagation: absent from official community-plugins.json; CLI install produced no installed plugin",
+  "testVaultChannel": "verified manual release files restored; 21 actual-host checks pass",
+  "recheckAfter": "2026-11-13T12:00:00+01:00",
+  "recheckScheduled": false,
+  "propagationReference": "https://obsidian.md/blog/future-of-plugins/",
+  "supersededCandidate": "0.1.5 remains an unpublished draft; tag/assets were not replaced"
+}

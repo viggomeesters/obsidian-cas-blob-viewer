@@ -1,0 +1,51 @@
+{
+  "schema": "cas-blob-viewer.catalog-install.v1",
+  "checkedOn": "2026-11-13",
+  "version": "0.1.6",
+  "sourceCommit": "f34cc596b7aeea16243f54027d85892d61417759",
+  "repository": "viggomeesters/obsidian-cas-blob-viewer",
+  "catalogId": "cas-blob-viewer",
+  "channel": "community",
+  "fresh": true,
+  "method": "Supported Obsidian CLI plugin:uninstall, verified absent plugin directory, then plugin:install id=cas-blob-viewer enable. Waited for actual files and loaded runtime; command return alone was insufficient.",
+  "previousInstallationBackedUp": true,
+  "pluginDirectoryAbsentBeforeInstall": true,
+  "officialRegistryIdentityMatched": true,
+  "manualFilesSubstituted": false,
+  "defaultSettingsMatched": true,
+  "dataJsonAbsentBeforeAndAfterTests": true,
+  "enabledPluginsBytesPreserved": true,
+  "activeNotePreserved": true,
+  "runtimeVersion": "0.1.6",
+  "runtimeReport": "runtime-0.1.6-catalog-macos.json",
+  "hostChecksPassed": 21,
+  "reload": {
+    "oldInstanceInactive": true,
+    "oldObjectUrlsReleased": true,
+    "newInstanceLoaded": true,
+    "newInstanceActive": true,
+    "cooperatingPluginsStillLoaded": true,
+    "temporaryMarkerRemoved": true
+  },
+  "releaseAssetsSHA256": {
+    "main.js": "b206b9f06ec728396978c5910143e603cd9f60277719a7ea7550dbf963a34dff",
+    "manifest.json": "f3e8ecf8c3c918ad694665f2d520763cc9d91f6f9d2c800215eac5d3a94e347e",
+    "styles.css": "ab1c0c9f081125d3e5dd4489126cdcf8c93e68f37581d21e6eeb5d63db535b15"
+  },
+  "installedMainJsSHA256": "7f8023f6b7145099ba64e4282bbec9b634a5886f33e5c3800fac4fe265f0be00",
+  "installedMainJsBytes": 14431,
+  "releaseMainJsBytes": 14413,
+  "exactAppendedMainJsSuffix": "\n/* nosourcemap */",
+  "manifestAndStylesMatchReleaseExactly": true,
+  "freshLocalValidation": ["npm ci", "lint --max-warnings=0", "TypeScript", "unit tests", "production build", "bundle security/lifecycle tests", "Community preflight"],
+  "productionAuditVulnerabilities": 0,
+  "developmentAudit": {
+    "moderate": 12,
+    "high": 0,
+    "critical": 0,
+    "scope": "Development lint/tooling and SDK transitive dependencies; no affected package is bundled in this released plugin. This does not assess the Obsidian host's own dependencies.",
+    "followUp": "https://github.com/viggomeesters/obsidian-cas-blob-viewer/issues/5"
+  },
+  "independentAcceptanceReview": "Approved against actual installation, byte comparison, host report, restoration and audit boundaries.",
+  "boundaries": "macOS Apple Silicon and Obsidian 1.15.0 only. No new minimum-version, mobile, Intel, PDF-interaction or experimental Live Preview runtime claim. No release assets or product code changed."
+}

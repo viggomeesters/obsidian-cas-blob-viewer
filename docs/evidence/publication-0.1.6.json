@@ -17,10 +17,17 @@
     "manifest.json": "f3e8ecf8c3c918ad694665f2d520763cc9d91f6f9d2c800215eac5d3a94e347e",
     "styles.css": "ab1c0c9f081125d3e5dd4489126cdcf8c93e68f37581d21e6eeb5d63db535b15"
   },
-  "catalogInstall": "pending new-ID propagation: absent from official community-plugins.json; CLI install produced no installed plugin",
-  "testVaultChannel": "verified manual release files restored; 21 actual-host checks pass",
-  "recheckAfter": "2026-11-13T12:00:00+01:00",
+  "catalogInstall": "pass: fresh Community installation of 0.1.6 verified on 2026-11-13; see catalog-install-0.1.6.json",
+  "testVaultChannel": "community; original settings, enabled plugin list and active note preserved",
   "recheckScheduled": false,
   "propagationReference": "https://obsidian.md/blog/future-of-plugins/",
-  "supersededCandidate": "0.1.5 remains an unpublished draft; tag/assets were not replaced"
+  "supersededCandidate": "0.1.5 remains an unpublished draft; tag/assets were not replaced",
+  "catalogPropagationHistory": {
+    "checkedOn": "2026-11-12",
+    "catalogInstall": "pending new-ID propagation: absent from official community-plugins.json; CLI install produced no installed plugin",
+    "testVaultChannel": "verified manual release files restored; 21 actual-host checks pass",
+    "recheckAfter": "2026-11-13T12:00:00+01:00"
+  },
+  "catalogInstallEvidence": "catalog-install-0.1.6.json",
+  "catalogInstallCompletedOn": "2026-11-13"
 }

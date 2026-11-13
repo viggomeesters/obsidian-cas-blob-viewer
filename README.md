@@ -53,9 +53,9 @@ Live Preview rendering is off by default. Reading view rendering is the safe def
 
 ## Installation and compatibility
 
-[CAS Blob Viewer is published on Obsidian Community](https://community.obsidian.md/plugins/cas-blob-viewer) as version 0.1.6 with a passed review and byte-for-byte build verification. The first app-catalog installation is awaiting new-plugin propagation, which Obsidian says can take up to 24 hours. Once available, install it through **Settings → Community plugins → Browse**.
+[CAS Blob Viewer is published on Obsidian Community](https://community.obsidian.md/plugins/cas-blob-viewer) as version 0.1.6 with a passed review and byte-for-byte build verification. A fresh installation through the Community catalog was verified on 13 November 2026 in Obsidian 1.15.0 on macOS Apple Silicon. Install it through **Settings → Community plugins → Browse**.
 
-Manual installation uses `main.js`, `manifest.json` and `styles.css` from the [0.1.6 release](https://github.com/viggomeesters/obsidian-cas-blob-viewer/releases/tag/0.1.6). Place them in `.obsidian/plugins/cas-blob-viewer/` in a test vault first. Manual installation has been tested; it is distinct from the still-pending catalog-install check. See [publication evidence](docs/evidence/publication-0.1.6.json).
+Manual installation uses `main.js`, `manifest.json` and `styles.css` from the [0.1.6 release](https://github.com/viggomeesters/obsidian-cas-blob-viewer/releases/tag/0.1.6). Place them in `.obsidian/plugins/cas-blob-viewer/` in a test vault first. Both manual and Community installation have been tested separately. See [publication evidence](docs/evidence/publication-0.1.6.json).
 
 The plugin reads existing blobs; it does not create a CAS store or import attachments. All paths must remain relative to the current vault. Optional metadata must use `record_type: "file"`, `sha256`, and optionally `filename`/`mime_type`. Invalid metadata rows are ignored. HTML, XHTML and text render as inert source, never as an executable web page. PDF content opens in the browser's PDF viewer. Images render inline. Unsupported content and oversized blobs display a card. The size limit controls preview reads; the hash syntax identifies the expected blob but does not verify its digest.
 

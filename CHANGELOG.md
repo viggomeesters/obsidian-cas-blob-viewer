@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.7 - 2026-11-16
+
+- Maintenance verification for Obsidian 1.15.1 on macOS desktop.
+- Add reproducible official Obsidian lint checks; no runtime code change.
+
 ## 0.1.6
 
 - Declare the ES2020 library used by String.matchAll, so official source analysis resolves its types consistently.

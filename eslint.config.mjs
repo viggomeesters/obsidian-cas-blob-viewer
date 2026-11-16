@@ -1,14 +1,7 @@
-import tsparser from "@typescript-eslint/parser";
-import { defineConfig } from "eslint/config";
+// Required ESLint flat-config interface for the official Obsidian checker.
 import obsidianmd from "eslint-plugin-obsidianmd";
-
-export default defineConfig([
+export default [
+  { ignores: ["node_modules/**", "main.js", "esbuild.config.mjs", "version-bump.mjs", "eslint.config.mjs", "scripts/**", "test-fixtures/**", "fixtures/**", "dist-test/**", "tests/**", "test/**"] },
   ...obsidianmd.configs.recommended,
-  {
-    files: ["src/**/*.ts"],
-    languageOptions: {
-      parser: tsparser,
-      parserOptions: { project: "./tsconfig.json" },
-    },
-  },
-]);
+  { files: ["**/*.ts"], languageOptions: { parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname } } },
+];

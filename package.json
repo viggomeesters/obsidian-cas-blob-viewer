@@ -1,6 +1,6 @@
 {
   "name": "cas-blob-viewer",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Render content-addressed vault blobs inline from durable sha256 references.",
   "license": "MIT",
   "author": "Viggo Meesters",
@@ -19,14 +19,14 @@
     "typecheck": "tsc --noEmit",
     "test": "node scripts/build-test.mjs && node scripts/unit-test.mjs && npm run build && node scripts/runtime-test.mjs",
     "community:check": "node scripts/community-check.mjs",
-    "lint": "eslint src --max-warnings=0",
+    "lint": "eslint .",
     "test:host": "node scripts/host-test.mjs"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
     "esbuild": "^0.25.12",
-    "eslint": "^9.39.5",
-    "eslint-plugin-obsidianmd": "^0.5.1",
+    "eslint": "9.39.4",
+    "eslint-plugin-obsidianmd": "0.6.0",
     "obsidian": "^1.8.7",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.72.2"

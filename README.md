@@ -68,3 +68,6 @@ Run `npm ci`, `npm run lint`, `npm run typecheck`, `npm test`, `npm run build` a
 ## License
 
 MIT; see LICENSE. No vendored third-party runtime code is included in the release bundle.
+
+
+[Obsidian 1.15.1 assessment: checked source, local results and remaining host validation](docs/obsidian-1.15.1.md).

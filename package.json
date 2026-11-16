@@ -19,7 +19,7 @@
     "typecheck": "tsc --noEmit",
     "test": "node scripts/build-test.mjs && node scripts/unit-test.mjs && npm run build && node scripts/runtime-test.mjs",
     "community:check": "node scripts/community-check.mjs",
-    "lint": "eslint .",
+    "lint": "eslint . --max-warnings=0",
     "test:host": "node scripts/host-test.mjs"
   },
   "devDependencies": {

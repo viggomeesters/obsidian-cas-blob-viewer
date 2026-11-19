@@ -1,5 +1,8 @@
 # Development dependency assessment — 17 November 2026
 
+> Historical assessment: superseded by [the follow-up](development-audit-2026-11-19-followup.md).
+
+
 Issue #5 is assessed against public main 962931c. This change updates only the development dependency contract and its lockfile: Obsidian SDK 1.14.4 and typescript-eslint 8.73.0. The SDK replaces the vulnerable Moment development transitive with 2.31.0. TypeScript ESLint uses patched minimatch 11.0.9. No forced override, obsolete linter downgrade, runtime source edit or published asset replacement is used.
 
 Validation used Node 24.21.0 and npm 11.19.0 on Linux x86_64. The updated minimatch toolchain requires Node 20 or >=22; this assessment makes no older-Node claim. Ordinary npm ci, repository unit/runtime-security/lifecycle tests, official lint, typecheck, community:check and complete peer-tree inspection passed. The SDK's compatible CodeMirror peer refresh is retained in the lock; both CodeMirror packages and Obsidian remain external to the bundle. Production main.js is unchanged: SHA-256 b206b9f06ec728396978c5910143e603cd9f60277719a7ea7550dbf963a34dff. No new runtime or platform compatibility claim follows from these development checks.
